@@ -1,0 +1,57 @@
+name: VivIrpinia Scraping
+
+on:
+  schedule:
+    - cron: '0 6,12,18,22 * * *'   # 4 volte al giorno: 6, 12, 18, 22 UTC
+  workflow_dispatch:                  # avvio manuale da GitHub Actions
+    inputs:
+      fonte:
+        description: 'Fonte specifica (lascia vuoto per tutte)'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Dry run (true/false)'
+        required: false
+        default: 'false'
+
+jobs:
+  scraping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Installa dipendenze
+        run: pip install -r requirements.txt
+
+      - name: Esegui scraping
+        env:
+          WP_URL:          ${{ secrets.WP_URL }}
+          WP_USER:         ${{ secrets.WP_USER }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          FB_TOKEN:        ${{ secrets.FB_TOKEN }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.fonte }}" ]; then
+            ARGS="--fonte ${{ github.event.inputs.fonte }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python agent.py $ARGS
+
+      - name: Carica log come artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraping-log-${{ github.run_number }}
+          path: scraping.log
+          retention-days: 7

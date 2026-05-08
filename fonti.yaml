@@ -1,0 +1,200 @@
+# ============================================================
+# VivIrpinia — Fonti di scraping
+# ============================================================
+# Per AGGIUNGERE una fonte: copia un blocco esistente e modifica
+# Per RIMUOVERE una fonte: metti enabled: false oppure cancella il blocco
+# Per DISABILITARE temporaneamente: enabled: false
+#
+# Tipi supportati:
+#   html      — pagina web generica (parsing HTML)
+#   rss       — feed RSS/Atom
+#   facebook  — pagina Facebook (richiede FB_TOKEN in .env)
+#   json      — endpoint JSON/REST
+#
+# Categoria eventi: Sagra, Enoturismo, Cultura, Musica, Sport,
+#                   Tradizione, Natura, Gastronomia, Religioso
+
+fonti:
+
+  # ── ISTITUZIONALI ──────────────────────────────────────────
+  - id: provincia_avellino
+    nome: Provincia di Avellino
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.provincia.avellino.it/news-ed-eventi/eventi
+      - https://www.provincia.avellino.it/comunicati-stampa
+    categoria_default: Cultura
+    comuni_filtro: []          # vuoto = accetta tutti i comuni AV
+
+  - id: comune_avellino
+    nome: Comune di Avellino
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.avellino.it/feed/
+    categoria_default: Cultura
+
+  - id: comune_ariano
+    nome: Comune di Ariano Irpino
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.ariano-irpino.av.it/feed/
+    categoria_default: Cultura
+
+  - id: comune_nusco
+    nome: Comune di Nusco
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.nusco.av.it/feed/
+    categoria_default: Cultura
+
+  - id: comune_taurasi
+    nome: Comune di Taurasi
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.taurasi.av.it/feed/
+    categoria_default: Enoturismo
+
+  - id: comune_montella
+    nome: Comune di Montella
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.montella.av.it/feed/
+    categoria_default: Sagra
+
+  - id: comune_bagnoli
+    nome: Comune di Bagnoli Irpino
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.bagnoli-irpino.av.it/feed/
+    categoria_default: Natura
+
+  - id: comune_gesualdo
+    nome: Comune di Gesualdo
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.gesualdo.av.it/feed/
+    categoria_default: Cultura
+
+  - id: comune_calitri
+    nome: Comune di Calitri
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.comune.calitri.av.it/feed/
+    categoria_default: Cultura
+
+  # ── TURISMO E REGIONE ─────────────────────────────────────
+  - id: regione_campania
+    nome: Regione Campania Turismo
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.incampania.com/eventi/
+    categoria_default: Cultura
+    comuni_filtro: []          # filtra solo eventi con luogo in provincia AV
+
+  - id: ept_avellino
+    nome: EPT Avellino (Turismo)
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.eptavellino.it/eventi/
+      - https://www.eptavellino.it/news/
+    categoria_default: Cultura
+
+  # ── SAGRE E FESTE ─────────────────────────────────────────
+  - id: sagre_it
+    nome: Sagre.it — Provincia AV
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.sagre.it/campania/avellino/
+    categoria_default: Sagra
+
+  - id: feste_it
+    nome: Feste.net — Avellino
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.feste.net/campania/avellino/
+    categoria_default: Tradizione
+
+  # ── VINO E CONSORZI ───────────────────────────────────────
+  - id: consorzio_taurasi
+    nome: Consorzio Tutela Vini d'Irpinia
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.consorziovinidirpinia.it/news/
+      - https://www.consorziovinidirpinia.it/eventi/
+    categoria_default: Enoturismo
+
+  - id: movimento_turismo_vino
+    nome: Movimento Turismo del Vino Campania
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.mtvCampania.it/eventi/
+    categoria_default: Enoturismo
+
+  # ── PRO LOCO ──────────────────────────────────────────────
+  - id: proloco_avellino
+    nome: Pro Loco Avellino
+    tipo: rss
+    enabled: true
+    urls:
+      - https://www.prolocoavellino.it/feed/
+    categoria_default: Tradizione
+
+  - id: unpli_campania
+    nome: UNPLI Campania (Pro Loco)
+    tipo: html
+    enabled: true
+    urls:
+      - https://www.unplicampania.it/eventi/
+    categoria_default: Tradizione
+
+  # ── FACEBOOK ──────────────────────────────────────────────
+  # Richiede FB_TOKEN nel file .env
+  - id: facebook_proloco
+    nome: Facebook Pro Loco Irpine
+    tipo: facebook
+    enabled: false             # attiva quando hai il token Facebook
+    pagine:
+      - prolocoavellino
+      - prolocotaurasi
+      - proloconusco
+      - prolocomontella
+      - prolocoariano
+      - prolocobagnoli
+      - irpiniaeventi
+    categoria_default: Sagra
+
+  # ── COME AGGIUNGERE UNA NUOVA FONTE ───────────────────────
+  # Esempio fonte HTML generica:
+  #
+  # - id: mio_sito              # identificativo unico (senza spazi)
+  #   nome: Nome del sito       # nome leggibile
+  #   tipo: html                # html | rss | facebook | json
+  #   enabled: true
+  #   urls:
+  #     - https://www.esempio.it/eventi/
+  #   categoria_default: Sagra  # categoria di default per questa fonte
+  #
+  # Esempio feed RSS:
+  #
+  # - id: mio_rss
+  #   nome: Feed RSS sito
+  #   tipo: rss
+  #   enabled: true
+  #   urls:
+  #     - https://www.esempio.it/feed/
+  #   categoria_default: Cultura
