@@ -10,7 +10,10 @@ class WPWriter:
         self.log    = logging.getLogger('wp_writer')
         self.session = requests.Session()
         self.session.auth = config.wp_auth
-        self.session.headers.update({'Content-Type': 'application/json'})
+        self.session.headers.update({
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + config.basic_auth_header,
+    })
 
     def salva_eventi(self, eventi: list) -> int:
         """Salva una lista di eventi, salta i duplicati. Ritorna il numero di nuovi salvati."""

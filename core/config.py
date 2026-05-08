@@ -1,4 +1,5 @@
 """Configurazione centralizzata — legge da variabili d'ambiente o .env"""
+import base64
 import os
 from pathlib import Path
 
@@ -8,6 +9,13 @@ try:
 except ImportError:
     pass
 
+MAINTENANCE_USER = os.getenv('MAINTENANCE_USER', '')
+MAINTENANCE_PASS = os.getenv('MAINTENANCE_PASS', '')
+
+@property
+def basic_auth_header(self):
+    credentials = f"{self.MAINTENANCE_USER}:{self.MAINTENANCE_PASS}"
+    return base64.b64encode(credentials.encode()).decode()
 
 class Config:
     # WordPress REST API

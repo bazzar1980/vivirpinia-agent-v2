@@ -40,6 +40,8 @@ jobs:
           WP_USER:         ${{ secrets.WP_USER }}
           WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
           FB_TOKEN:        ${{ secrets.FB_TOKEN }}
+          MAINTENANCE_USER: ${{ secrets.MAINTENANCE_USER }}
+          MAINTENANCE_PASS: ${{ secrets.MAINTENANCE_PASS }}
         run: |
           ARGS=""
           if [ -n "${{ github.event.inputs.fonte }}" ]; then
