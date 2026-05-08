@@ -9,19 +9,16 @@ try:
 except ImportError:
     pass
 
-MAINTENANCE_USER = os.getenv('MAINTENANCE_USER', '')
-MAINTENANCE_PASS = os.getenv('MAINTENANCE_PASS', '')
-
-@property
-def basic_auth_header(self):
-    credentials = f"{self.MAINTENANCE_USER}:{self.MAINTENANCE_PASS}"
-    return base64.b64encode(credentials.encode()).decode()
 
 class Config:
     # WordPress REST API
     WP_URL          = os.getenv('WP_URL',   'https://www.vivirpinia.it')
     WP_USER         = os.getenv('WP_USER',  'admin')
-    WP_PASSWORD     = os.getenv('WP_APP_PASSWORD', '')  # Application Password WP
+    WP_PASSWORD     = os.getenv('WP_APP_PASSWORD', '')
+
+    # Manutenzione Basic Auth
+    MAINTENANCE_USER = os.getenv('MAINTENANCE_USER', '')
+    MAINTENANCE_PASS = os.getenv('MAINTENANCE_PASS', '')
 
     # Facebook Graph API (opzionale)
     FB_TOKEN        = os.getenv('FB_TOKEN', '')
@@ -42,3 +39,8 @@ class Config:
     @property
     def wp_auth(self):
         return (self.WP_USER, self.WP_PASSWORD)
+
+    @property
+    def basic_auth_header(self):
+        credentials = f"{self.MAINTENANCE_USER}:{self.MAINTENANCE_PASS}"
+        return base64.b64encode(credentials.encode()).decode()
